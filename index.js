@@ -1,6 +1,7 @@
 //const express = require("express"); //3rd party package import
 import express from "express";
 import { MongoClient } from "mongodb";
+import router from "./routes/movies.js";
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
 const app = express();
@@ -129,67 +130,8 @@ app.use(express.json());
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
-app.get("/movies", async function (request, response) {
-  if (request.query.rating) {
-    request.query.rating = +request.query.rating;
-  }
-  const movies = await clientdb
-    .db("movies2")
-    .collection("moviesdata3")
-    .find(request.query)
-    .toArray();
-  console.log(movies);
-  response.send(movies);
-});
-app.get("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  console.log(request.params, id);
-  //const movie = movies.find((mv) => mv.id === id);
-  const movie = await clientdb
-    .db("movies2")
-    .collection("moviesdata3")
-    .findOne({ id });
+app.use("/movies",router)
 
-  movie
-    ? response.send(movie)
-    : response.status(404).send({ message: "message not found" });
-});
-app.post("/movies", async function (request, response) {
-  const data = request.body;
-  console.log(data);
-
-  const movies = await clientdb
-    .db("movies2")
-    .collection("moviesdata3")
-    .insertMany(data);
-  response.send(movies);
-});
-app.delete("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  console.log(request.params, id);
-  //const movie = movies.find((mv) => mv.id === id);
-  const result = await clientdb
-    .db("movies2")
-    .collection("moviesdata3")
-    .deleteOne({ id });
-
-  result
-    ? response.send(result)
-    : response.status(404).send({ message: "message not found" });
-});
-app.put("/movies/:id", async function (request, response) {
-  const { id } = request.params;
-  console.log(request.params, id);
-  const data = request.body;
-  console.log(data);
-  //const movie = movies.find((mv) => mv.id === id);
-  const results = await clientdb
-    .db("movies2")
-    .collection("moviesdata3")
-    .updateOne({ id: id }, { $set: data });
-  console.log(results);
-
-  response.send(results);
-});
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
+export{clientdb}
