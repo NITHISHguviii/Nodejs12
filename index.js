@@ -1,4 +1,3 @@
-//const express = require("express"); //3rd party package import
 import express from "express";
 import { MongoClient } from "mongodb";
 import router from "./routes/movies.js";
