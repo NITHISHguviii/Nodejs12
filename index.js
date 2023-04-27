@@ -1,6 +1,9 @@
 import express from "express";
 import { MongoClient } from "mongodb";
 import router from "./routes/movies.js";
+import bcrypt from "bcrypt";
+
+
 import * as dotenv from "dotenv"; // see https://github.com/motdotla/dotenv#how-do-i-use-dotenv-with-import
 dotenv.config();
 const app = express();
@@ -129,8 +132,17 @@ app.use(express.json());
 app.get("/", function (request, response) {
   response.send("🙋‍♂️, 🌏 🎊✨🤩");
 });
-app.use("/movies",router)
-
+app.use("/movies", router);
 
 app.listen(PORT, () => console.log(`The server started in: ${PORT} ✨✨`));
-export{clientdb}
+
+//how to create hashpassword
+async function generatehashedpassword(password) {
+  const no_of_rounds = 10;
+  const salt = await bcrypt.genSalt(no_of_rounds);
+  const hashedpassword = await bcrypt.hash(password, salt);
+  console.log(salt);
+  console.log(hashedpassword);
+}
+generatehashedpassword("password@123");
+export { clientdb };
