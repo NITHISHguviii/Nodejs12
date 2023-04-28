@@ -13,4 +13,7 @@ import bcrypt from "bcrypt";
 export async function Createuser(data) {
   return await clientdb.db("movies2").collection("users").insertOne(data);
 }
+export async function getuserbyname(username) {
+  return await clientdb.db("movies2").collection("users").findOne({username:username});
+}
 
